@@ -7,8 +7,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { ChevronLeft, ChevronRight, HelpCircle } from "lucide-react"
+import { ChevronLeft, ChevronRight, HelpCircle, ChevronDown } from "lucide-react"
 import { ScenarioModal, type CustomScenario } from "./scenario-modal"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 
 interface CollapsibleControlsSidebarProps {
   onScenarioChange: (scenario: string, customData?: CustomScenario) => void
@@ -24,12 +25,7 @@ export function CollapsibleControlsSidebar({ onScenarioChange, onPaymentChange }
   const [loanTerm, setLoanTerm] = useState([25])
   const [interestRate, setInterestRate] = useState([5.5])
   const [showScenarioModal, setShowScenarioModal] = useState(false)
-  const [retrofitChoices, setRetrofitChoices] = useState({
-    windows: false,
-    cooling: false,
-    lighting: false,
-    solar: false,
-  })
+  const [installationYear, setInstallationYear] = useState("2025")
 
   const handleScenarioChange = (newScenario: string) => {
     setScenario(newScenario)
@@ -58,13 +54,6 @@ export function CollapsibleControlsSidebar({ onScenarioChange, onPaymentChange }
     if (paymentMethod === "loan") {
       onPaymentChange(paymentMethod, loanCoverage[0], loanTerm[0], interestRate[0])
     }
-  }
-
-  const handleRetrofitChoice = (choice: keyof typeof retrofitChoices) => {
-    setRetrofitChoices((prev) => ({
-      ...prev,
-      [choice]: !prev[choice],
-    }))
   }
 
   return (
@@ -219,50 +208,241 @@ export function CollapsibleControlsSidebar({ onScenarioChange, onPaymentChange }
             {/* Retrofit Choices */}
             <Card className="rounded-2xl shadow-md">
               <CardHeader className="pb-4">
-                <CardTitle className="text-lg" style={{ color: "#112A43" }}>
-                  Retrofit Choices
-                </CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg" style={{ color: "#112A43" }}>
+                    Retrofit Choices
+                  </CardTitle>
+                  <div className="flex flex-col items-end">
+                    <label className="text-xs font-medium mb-1 text-gray-600">Installation Year</label>
+                    <Select value={installationYear} onValueChange={setInstallationYear}>
+                      <SelectTrigger className="w-20 h-8 text-xs">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-32">
+                        <SelectItem value="2024">2024</SelectItem>
+                        <SelectItem value="2025">2025</SelectItem>
+                        <SelectItem value="2026">2026</SelectItem>
+                        <SelectItem value="2027">2027</SelectItem>
+                        <SelectItem value="2028">2028</SelectItem>
+                        <SelectItem value="2029">2029</SelectItem>
+                        <SelectItem value="2030">2030</SelectItem>
+                        <SelectItem value="2031">2031</SelectItem>
+                        <SelectItem value="2032">2032</SelectItem>
+                        <SelectItem value="2033">2033</SelectItem>
+                        <SelectItem value="2034">2034</SelectItem>
+                        <SelectItem value="2035">2035</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
               </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="windows"
-                    checked={retrofitChoices.windows}
-                    onCheckedChange={() => handleRetrofitChoice("windows")}
-                  />
-                  <label htmlFor="windows" className="text-sm cursor-pointer">
-                    Upgrade windows & insulation
-                  </label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="cooling"
-                    checked={retrofitChoices.cooling}
-                    onCheckedChange={() => handleRetrofitChoice("cooling")}
-                  />
-                  <label htmlFor="cooling" className="text-sm cursor-pointer">
-                    Upgrade cooling & heating
-                  </label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="lighting"
-                    checked={retrofitChoices.lighting}
-                    onCheckedChange={() => handleRetrofitChoice("lighting")}
-                  />
-                  <label htmlFor="lighting" className="text-sm cursor-pointer">
-                    Upgrade lighting & energy management
-                  </label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="solar"
-                    checked={retrofitChoices.solar}
-                    onCheckedChange={() => handleRetrofitChoice("solar")}
-                  />
-                  <label htmlFor="solar" className="text-sm cursor-pointer">
-                    Install solar panels
-                  </label>
+              <CardContent>
+                <div className="space-y-4">
+                  {/* Upgrade heating & cooling systems */}
+                  <Collapsible>
+                    <CollapsibleTrigger className="flex items-center justify-between w-full p-3 text-left rounded-xl hover:bg-gray-50 transition-colors">
+                      <span className="font-semibold text-sm">Upgrade heating & cooling systems</span>
+                      <ChevronDown className="w-4 h-4" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="pl-4 pt-3 space-y-3">
+                      <div className="flex items-center space-x-3">
+                        <Checkbox id="heat-pump-electric" className="w-4 h-4" />
+                        <div className="flex items-center gap-2 flex-1">
+                          <div className="flex gap-1">
+                            <div className="w-8 h-4 bg-blue-100 rounded-full flex items-center justify-center text-xs font-bold text-blue-800">
+                              $12
+                            </div>
+                            <div className="w-8 h-4 bg-green-100 rounded-full flex items-center justify-center text-xs font-bold text-green-800">
+                              -25%
+                            </div>
+                          </div>
+                          <label htmlFor="heat-pump-electric" className="text-sm cursor-pointer">
+                            Heat pump (electric)
+                          </label>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Checkbox id="heat-pump-hybrid" className="w-4 h-4" />
+                        <div className="flex items-center gap-2 flex-1">
+                          <div className="flex gap-1">
+                            <div className="w-8 h-4 bg-blue-100 rounded-full flex items-center justify-center text-xs font-bold text-blue-800">
+                              $15
+                            </div>
+                            <div className="w-8 h-4 bg-green-100 rounded-full flex items-center justify-center text-xs font-bold text-green-800">
+                              -20%
+                            </div>
+                          </div>
+                          <label htmlFor="heat-pump-hybrid" className="text-sm cursor-pointer">
+                            Heat pump (hybrid)
+                          </label>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Checkbox id="replace-chiller" className="w-4 h-4" />
+                        <div className="flex items-center gap-2 flex-1">
+                          <div className="flex gap-1">
+                            <div className="w-8 h-4 bg-blue-100 rounded-full flex items-center justify-center text-xs font-bold text-blue-800">
+                              $18
+                            </div>
+                            <div className="w-8 h-4 bg-green-100 rounded-full flex items-center justify-center text-xs font-bold text-green-800">
+                              -30%
+                            </div>
+                          </div>
+                          <label htmlFor="replace-chiller" className="text-sm cursor-pointer">
+                            Replace chiller
+                          </label>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Checkbox id="smart-thermostat" className="w-4 h-4" />
+                        <div className="flex items-center gap-2 flex-1">
+                          <div className="flex gap-1">
+                            <div className="w-8 h-4 bg-blue-100 rounded-full flex items-center justify-center text-xs font-bold text-blue-800">
+                              $2
+                            </div>
+                            <div className="w-8 h-4 bg-green-100 rounded-full flex items-center justify-center text-xs font-bold text-green-800">
+                              -8%
+                            </div>
+                          </div>
+                          <label htmlFor="smart-thermostat" className="text-sm cursor-pointer">
+                            Smart thermostat
+                          </label>
+                        </div>
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
+
+                  {/* Improve insulation */}
+                  <Collapsible>
+                    <CollapsibleTrigger className="flex items-center justify-between w-full p-3 text-left rounded-xl hover:bg-gray-50 transition-colors">
+                      <span className="font-semibold text-sm">Improve insulation</span>
+                      <ChevronDown className="w-4 h-4" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="pl-4 pt-3 space-y-3">
+                      <div className="flex items-center space-x-3">
+                        <Checkbox id="solar-shading" className="w-4 h-4" />
+                        <div className="flex items-center gap-2 flex-1">
+                          <div className="flex gap-1">
+                            <div className="w-8 h-4 bg-blue-100 rounded-full flex items-center justify-center text-xs font-bold text-blue-800">
+                              $8
+                            </div>
+                            <div className="w-8 h-4 bg-green-100 rounded-full flex items-center justify-center text-xs font-bold text-green-800">
+                              -12%
+                            </div>
+                          </div>
+                          <label htmlFor="solar-shading" className="text-sm cursor-pointer">
+                            Install solar shading
+                          </label>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Checkbox id="replace-glazing" className="w-4 h-4" />
+                        <div className="flex items-center gap-2 flex-1">
+                          <div className="flex gap-1">
+                            <div className="w-8 h-4 bg-blue-100 rounded-full flex items-center justify-center text-xs font-bold text-blue-800">
+                              $25
+                            </div>
+                            <div className="w-8 h-4 bg-green-100 rounded-full flex items-center justify-center text-xs font-bold text-green-800">
+                              -18%
+                            </div>
+                          </div>
+                          <label htmlFor="replace-glazing" className="text-sm cursor-pointer">
+                            Replace glazing
+                          </label>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Checkbox id="insulate-walls" className="w-4 h-4" />
+                        <div className="flex items-center gap-2 flex-1">
+                          <div className="flex gap-1">
+                            <div className="w-8 h-4 bg-blue-100 rounded-full flex items-center justify-center text-xs font-bold text-blue-800">
+                              $14
+                            </div>
+                            <div className="w-8 h-4 bg-green-100 rounded-full flex items-center justify-center text-xs font-bold text-green-800">
+                              -15%
+                            </div>
+                          </div>
+                          <label htmlFor="insulate-walls" className="text-sm cursor-pointer">
+                            Insulate walls
+                          </label>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Checkbox id="insulate-roof" className="w-4 h-4" />
+                        <div className="flex items-center gap-2 flex-1">
+                          <div className="flex gap-1">
+                            <div className="w-8 h-4 bg-blue-100 rounded-full flex items-center justify-center text-xs font-bold text-blue-800">
+                              $10
+                            </div>
+                            <div className="w-8 h-4 bg-green-100 rounded-full flex items-center justify-center text-xs font-bold text-green-800">
+                              -10%
+                            </div>
+                          </div>
+                          <label htmlFor="insulate-roof" className="text-sm cursor-pointer">
+                            Insulate roof
+                          </label>
+                        </div>
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
+
+                  {/* Make other interventions */}
+                  <Collapsible>
+                    <CollapsibleTrigger className="flex items-center justify-between w-full p-3 text-left rounded-xl hover:bg-gray-50 transition-colors">
+                      <span className="font-semibold text-sm">Make other interventions</span>
+                      <ChevronDown className="w-4 h-4" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="pl-4 pt-3 space-y-3">
+                      <div className="flex items-center space-x-3">
+                        <Checkbox id="led-lighting" className="w-4 h-4" />
+                        <div className="flex items-center gap-2 flex-1">
+                          <div className="flex gap-1">
+                            <div className="w-8 h-4 bg-blue-100 rounded-full flex items-center justify-center text-xs font-bold text-blue-800">
+                              $3
+                            </div>
+                            <div className="w-8 h-4 bg-green-100 rounded-full flex items-center justify-center text-xs font-bold text-green-800">
+                              -5%
+                            </div>
+                          </div>
+                          <label htmlFor="led-lighting" className="text-sm cursor-pointer">
+                            Upgrade to LED lighting
+                          </label>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Checkbox id="solar-panels" className="w-4 h-4" />
+                        <div className="flex items-center gap-2 flex-1">
+                          <div className="flex gap-1">
+                            <div className="w-8 h-4 bg-blue-100 rounded-full flex items-center justify-center text-xs font-bold text-blue-800">
+                              $20
+                            </div>
+                            <div className="w-8 h-4 bg-green-100 rounded-full flex items-center justify-center text-xs font-bold text-green-800">
+                              -35%
+                            </div>
+                          </div>
+                          <label htmlFor="solar-panels" className="text-sm cursor-pointer">
+                            Install solar panels
+                          </label>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Checkbox id="solar-thermal" className="w-4 h-4" />
+                        <div className="flex items-center gap-2 flex-1">
+                          <div className="flex gap-1">
+                            <div className="w-8 h-4 bg-blue-100 rounded-full flex items-center justify-center text-xs font-bold text-blue-800">
+                              $16
+                            </div>
+                            <div className="w-8 h-4 bg-green-100 rounded-full flex items-center justify-center text-xs font-bold text-green-800">
+                              -22%
+                            </div>
+                          </div>
+                          <label htmlFor="solar-thermal" className="text-sm cursor-pointer">
+                            Install solar thermal collector
+                          </label>
+                        </div>
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
                 </div>
               </CardContent>
             </Card>

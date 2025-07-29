@@ -239,7 +239,13 @@ export default function AssetSearchPage() {
 
     // Apply filters
     if (filters.propertyType !== "all") {
-      results = results.filter((property) => property.type.toLowerCase().replace(" ", "-") === filters.propertyType)
+      results = results.filter((property) => {
+        const propertyTypeKebab = property.type
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "-")
+          .replace(/-+/g, "-")
+        return propertyTypeKebab === filters.propertyType
+      })
     }
 
     if (filters.riskRating !== "all") {
@@ -439,11 +445,13 @@ export default function AssetSearchPage() {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="all">All Types</SelectItem>
+                            <SelectItem value="multi-family">Multi-family</SelectItem>
                             <SelectItem value="office">Office</SelectItem>
-                            <SelectItem value="retail">Retail</SelectItem>
                             <SelectItem value="industrial">Industrial</SelectItem>
-                            <SelectItem value="mixed-use">Mixed Use</SelectItem>
-                            <SelectItem value="residential">Residential</SelectItem>
+                            <SelectItem value="retail">Retail</SelectItem>
+                            <SelectItem value="healthcare">Healthcare</SelectItem>
+                            <SelectItem value="hospitality">Hospitality</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -497,11 +505,25 @@ export default function AssetSearchPage() {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="all">All Certifications</SelectItem>
-                            <SelectItem value="leed-platinum">LEED Platinum</SelectItem>
-                            <SelectItem value="leed-gold">LEED Gold</SelectItem>
-                            <SelectItem value="energy-star">Energy Star</SelectItem>
-                            <SelectItem value="boma-best">BOMA BEST</SelectItem>
-                            <SelectItem value="green-globes">Green Globes</SelectItem>
+                            <SelectItem value="LEED Gold">LEED Gold</SelectItem>
+                            <SelectItem value="LEED Platinum">LEED Platinum</SelectItem>
+                            <SelectItem value="BOMA BEST Gold">BOMA BEST Gold</SelectItem>
+                            <SelectItem value="BOMA BEST Platinum">BOMA BEST Platinum</SelectItem>
+                            <SelectItem value="BREEAM Excellent">BREEAM Excellent</SelectItem>
+                            <SelectItem value="BREEAM Outstanding">BREEAM Outstanding</SelectItem>
+                            <SelectItem value="ENERGY STAR (85)">ENERGY STAR (85)</SelectItem>
+                            <SelectItem value="ENERGY STAR for New Homes (v12.6+)">
+                              ENERGY STAR for New Homes (v12.6+)
+                            </SelectItem>
+                            <SelectItem value="Toronto Green Standard (v4) (Tier 2)">
+                              Toronto Green Standard (v4) (Tier 2)
+                            </SelectItem>
+                            <SelectItem value="Passive House Institute – EnerPHit">
+                              Passive House Institute – EnerPHit
+                            </SelectItem>
+                            <SelectItem value="BC Energy Step Code (Step 3)">BC Energy Step Code (Step 3)</SelectItem>
+                            <SelectItem value="UK EPC (A)">UK EPC (A)</SelectItem>
+                            <SelectItem value="UK EPC (B)">UK EPC (B)</SelectItem>
                             <SelectItem value="none">None</SelectItem>
                           </SelectContent>
                         </Select>

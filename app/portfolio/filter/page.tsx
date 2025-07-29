@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider"
 import { Badge } from "@/components/ui/badge"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { ChevronDown, X, Upload, Download, AlertCircle, HelpCircle, TrendingUp } from "lucide-react"
+import { ChevronDown, X, Upload, Download, AlertCircle, HelpCircle } from "lucide-react"
 import { Stepper } from "@/components/stepper"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -22,7 +22,7 @@ export default function PortfolioFilterPage() {
     province: "ontario",
     city: "toronto",
     propertyTypes: ["Office", "Retail"] as string[],
-    energySources: ["Fossil Fuel", "Electric"] as string[],
+    energySources: ["Natural Gas", "Electricity"] as string[],
     emissionRange: [20, 80],
     greenCertifications: ["LEED Gold"] as string[],
     lobs: {} as Record<string, string[]>,
@@ -215,8 +215,8 @@ export default function PortfolioFilterPage() {
       "Office",
       "2015",
       "250000",
-      "Fossil Fuel",
-      "LEED Gold",
+      "natural-gas",
+      "leed-gold",
       "8500000",
       "2300000",
       "6200000",
@@ -282,16 +282,6 @@ export default function PortfolioFilterPage() {
                 <Upload className="w-4 h-4 mr-2" />
                 Upload Portfolio CSV
               </Button>
-
-              <Link href="/portfolio/insights">
-                <Button
-                  className="rounded-full shadow-md hover:shadow-lg px-8 py-3 text-white font-semibold"
-                  style={{ backgroundColor: "#66DCCC", color: "#112A43" }}
-                >
-                  <TrendingUp className="w-4 h-4 mr-2" />I don't want to filter, give me the key insights!
-                </Button>
-              </Link>
-
               <Popover>
                 <PopoverTrigger>
                   <HelpCircle className="w-5 h-5 text-gray-400 hover:text-gray-600 cursor-pointer" />
@@ -317,6 +307,14 @@ export default function PortfolioFilterPage() {
                   </div>
                 </PopoverContent>
               </Popover>
+              <Link href="/portfolio/insights">
+                <Button
+                  className="rounded-full shadow-md hover:shadow-lg text-white px-8 py-3"
+                  style={{ backgroundColor: "#2B6CA9" }}
+                >
+                  I don't want to filter, give me the key insights!
+                </Button>
+              </Link>
             </div>
 
             {uploadedPortfolio.length > 0 && (
@@ -561,7 +559,7 @@ export default function PortfolioFilterPage() {
                 <CardTitle style={{ color: "#112A43" }}>Green Certifications</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3 max-h-80 overflow-y-auto">
+                <div className="space-y-3">
                   {greenCertifications.map((cert) => (
                     <div key={cert} className="flex items-center space-x-3">
                       <Checkbox

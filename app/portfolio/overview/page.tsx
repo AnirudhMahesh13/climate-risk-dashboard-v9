@@ -368,94 +368,484 @@ export default function PortfolioOverviewPage() {
   }
 
   const exportPDF = () => {
-    // Generate comprehensive PDF report content
+    // Generate comprehensive PDF report content as HTML
     const retrofitOptions = [
       {
         name: "Upgrade windows & insulation",
         cost: "$1.2M - $2.8M",
         revenueImpact: "+2.5% to +4.2%",
         expenseImpact: "-8% to -15%",
+        annualRevenue: "+$180K - $320K",
+        annualExpense: "-$65K - $120K",
         bestFor: "Older buildings (pre-2010) in colder climates",
+        paybackPeriod: "5.2 - 7.8 years",
+        description:
+          "Enhanced thermal performance through high-efficiency windows and improved insulation reduces heating and cooling loads while increasing tenant comfort and satisfaction.",
       },
       {
         name: "Upgrade cooling & heating",
         cost: "$800K - $2.1M",
         revenueImpact: "+1.8% to +3.5%",
         expenseImpact: "-12% to -22%",
+        annualRevenue: "+$140K - $280K",
+        annualExpense: "-$95K - $180K",
         bestFor: "Large office buildings with high energy consumption",
+        paybackPeriod: "3.8 - 6.2 years",
+        description:
+          "Modern HVAC systems with smart controls and variable frequency drives optimize energy usage and reduce operational costs significantly.",
       },
       {
         name: "Upgrade lighting & energy management",
         cost: "$400K - $900K",
         revenueImpact: "+1.2% to +2.8%",
         expenseImpact: "-5% to -12%",
+        annualRevenue: "+$85K - $210K",
+        annualExpense: "-$40K - $95K",
         bestFor: "Retail and mixed-use properties with extended operating hours",
+        paybackPeriod: "2.8 - 4.5 years",
+        description:
+          "LED lighting systems with occupancy sensors and daylight harvesting reduce electricity consumption by up to 40% while improving lighting quality.",
       },
       {
         name: "Install solar panels",
         cost: "$1.5M - $3.2M",
         revenueImpact: "+3.2% to +5.8%",
         expenseImpact: "-15% to -28%",
+        annualRevenue: "+$240K - $450K",
+        annualExpense: "-$120K - $230K",
         bestFor: "Properties with large roof areas in sunny locations",
+        paybackPeriod: "4.2 - 8.1 years",
+        description:
+          "On-site renewable energy generation with battery storage and grid tie-in capabilities provides long-term energy cost stability and carbon reduction.",
       },
     ]
 
-    const reportContent = `
-    PORTFOLIO CLIMATE RISK ANALYSIS REPORT
-    Generated: ${new Date().toLocaleDateString()}
-    
-    EXECUTIVE SUMMARY
-    Total Properties: ${portfolioMetrics.totalProperties}
-    Total Loan Value: $5.4B
-    Average Risk Number: ${portfolioMetrics.avgRiskNumber}
-    Average NOI Change: ${portfolioMetrics.avgNOIChange}
-    
-    RETROFIT ANALYSIS
-    
-    ${retrofitOptions
-      .map(
-        (retrofit, index) => `
-    ${index + 1}. ${retrofit.name.toUpperCase()}
-    Estimated Cost: ${retrofit.cost}
-    Revenue Impact: ${retrofit.revenueImpact}
-    Expense Impact: ${retrofit.expenseImpact}
-    Best Suited For: ${retrofit.bestFor}
-    `,
-      )
-      .join("\n")}
-    
-    PROPERTY TYPE RECOMMENDATIONS
-    
-    Office Buildings: Upgrade cooling & heating systems show highest ROI
-    Retail Properties: Lighting & energy management upgrades most cost-effective
-    Mixed-Use: Windows & insulation upgrades provide best long-term value
-    Industrial: Solar panel installations offer maximum energy savings
-    
-    GEOGRAPHIC RECOMMENDATIONS
-    
-    Ontario: Focus on heating system upgrades due to climate
-    BC: Solar installations viable year-round
-    Quebec: Insulation upgrades critical for energy efficiency
-    Alberta: Comprehensive HVAC upgrades recommended
-    
-    CONCLUSION
-    
-    Based on the analysis, properties would benefit most from a phased approach:
-    1. Immediate: Lighting & energy management (lowest cost, quick payback)
-    2. Medium-term: HVAC upgrades (moderate cost, significant savings)
-    3. Long-term: Solar installations (high cost, maximum long-term benefit)
-    
-    Properties in colder climates should prioritize insulation and heating upgrades,
-    while properties in sunnier locations should consider solar installations.
-    `
+    const propertyRecommendations = [
+      {
+        type: "Office Buildings (45 properties)",
+        primaryRecommendation: "Upgrade cooling & heating",
+        secondaryRecommendation: "Upgrade lighting & energy management",
+        rationale:
+          "High energy consumption from HVAC systems makes heating/cooling upgrades most impactful. Extended operating hours benefit from lighting efficiency.",
+        expectedROI: "18-24%",
+        totalInvestment: "$68M",
+        annualSavings: "$14.2M",
+      },
+      {
+        type: "Retail Properties (32 properties)",
+        primaryRecommendation: "Upgrade lighting & energy management",
+        secondaryRecommendation: "Install solar panels",
+        rationale:
+          "Extended operating hours and high lighting loads make LED upgrades most cost-effective. Large roof areas suitable for solar installation.",
+        expectedROI: "22-28%",
+        totalInvestment: "$42M",
+        annualSavings: "$10.8M",
+      },
+      {
+        type: "Mixed-Use (28 properties)",
+        primaryRecommendation: "Upgrade windows & insulation",
+        secondaryRecommendation: "Upgrade cooling & heating",
+        rationale:
+          "Diverse tenant mix benefits from improved thermal comfort. Building envelope improvements provide consistent benefits across all uses.",
+        expectedROI: "16-21%",
+        totalInvestment: "$58M",
+        annualSavings: "$11.4M",
+      },
+      {
+        type: "Industrial (18 properties)",
+        primaryRecommendation: "Install solar panels",
+        secondaryRecommendation: "Upgrade lighting & energy management",
+        rationale:
+          "Large roof areas and high daytime energy consumption make solar highly effective. Industrial lighting upgrades offer significant savings.",
+        expectedROI: "20-26%",
+        totalInvestment: "$35M",
+        annualSavings: "$8.1M",
+      },
+    ]
 
-    const blob = new Blob([reportContent], { type: "text/plain" })
-    const url = window.URL.createObjectURL(blob)
-    const a = document.createElement("a")
-    a.href = url
-    a.download = "portfolio-climate-risk-report.txt"
-    a.click()
-    window.URL.revokeObjectURL(url)
+    const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Portfolio Climate Risk Analysis Report</title>
+      <style>
+        body { 
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+          margin: 0; 
+          padding: 40px; 
+          line-height: 1.6; 
+          color: #333;
+          background: white;
+        }
+        .header { 
+          text-align: center; 
+          margin-bottom: 40px; 
+          border-bottom: 3px solid #2B6CA9;
+          padding-bottom: 30px;
+        }
+        .header h1 {
+          color: #112A43;
+          font-size: 2.5em;
+          margin-bottom: 10px;
+          font-weight: 700;
+        }
+        .header p {
+          color: #666;
+          font-size: 1.2em;
+          margin: 5px 0;
+        }
+        .executive-summary {
+          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+          padding: 30px;
+          border-radius: 12px;
+          margin-bottom: 40px;
+          border-left: 5px solid #2B6CA9;
+        }
+        .metrics-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 20px;
+          margin: 25px 0;
+        }
+        .metric-card {
+          background: white;
+          padding: 20px;
+          border-radius: 8px;
+          text-align: center;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+          border-top: 3px solid #2B6CA9;
+        }
+        .metric-value {
+          font-size: 2em;
+          font-weight: bold;
+          color: #2B6CA9;
+          margin-bottom: 5px;
+        }
+        .metric-label {
+          color: #666;
+          font-size: 0.9em;
+          font-weight: 600;
+        }
+        .section {
+          margin-bottom: 40px;
+          page-break-inside: avoid;
+        }
+        .section h2 {
+          color: #112A43;
+          font-size: 1.8em;
+          margin-bottom: 20px;
+          border-bottom: 2px solid #99EFE4;
+          padding-bottom: 10px;
+        }
+        .retrofit-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 25px;
+          margin: 25px 0;
+        }
+        .retrofit-card {
+          background: white;
+          border: 1px solid #e2e8f0;
+          border-radius: 12px;
+          padding: 25px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+          transition: transform 0.2s;
+        }
+        .retrofit-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        .retrofit-card h3 {
+          color: #112A43;
+          font-size: 1.3em;
+          margin-bottom: 15px;
+          font-weight: 600;
+        }
+        .retrofit-details {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 15px;
+          margin: 15px 0;
+        }
+        .detail-item {
+          background: #f8fafc;
+          padding: 12px;
+          border-radius: 6px;
+          border-left: 3px solid #66DCCC;
+        }
+        .detail-label {
+          font-weight: 600;
+          color: #112A43;
+          font-size: 0.9em;
+          margin-bottom: 3px;
+        }
+        .detail-value {
+          color: #2B6CA9;
+          font-weight: 700;
+        }
+        .description {
+          background: #f0f9ff;
+          padding: 15px;
+          border-radius: 8px;
+          margin-top: 15px;
+          font-style: italic;
+          color: #1e40af;
+          border-left: 4px solid #3b82f6;
+        }
+        .property-recommendations {
+          background: #fefefe;
+          border-radius: 12px;
+          padding: 30px;
+          margin: 30px 0;
+          border: 1px solid #e2e8f0;
+        }
+        .property-card {
+          background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+          border-radius: 10px;
+          padding: 25px;
+          margin: 20px 0;
+          border-left: 5px solid #10b981;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .property-card h4 {
+          color: #112A43;
+          font-size: 1.2em;
+          margin-bottom: 15px;
+          font-weight: 600;
+        }
+        .recommendation-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+          margin: 15px 0;
+        }
+        .recommendation-item {
+          background: white;
+          padding: 15px;
+          border-radius: 8px;
+          border: 1px solid #e2e8f0;
+        }
+        .recommendation-label {
+          font-weight: 600;
+          color: #059669;
+          font-size: 0.9em;
+          margin-bottom: 5px;
+        }
+        .recommendation-value {
+          color: #112A43;
+          font-weight: 500;
+        }
+        .financial-summary {
+          background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+          padding: 25px;
+          border-radius: 12px;
+          margin: 20px 0;
+          border: 1px solid #10b981;
+        }
+        .financial-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+          margin-top: 15px;
+        }
+        .financial-item {
+          text-align: center;
+          background: white;
+          padding: 15px;
+          border-radius: 8px;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .financial-item .value {
+          font-size: 1.4em;
+          font-weight: bold;
+          color: #059669;
+          margin-bottom: 5px;
+        }
+        .financial-item .label {
+          color: #666;
+          font-size: 0.9em;
+        }
+        .conclusion {
+          background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+          padding: 30px;
+          border-radius: 12px;
+          margin-top: 40px;
+          border-left: 5px solid #f59e0b;
+        }
+        .conclusion h3 {
+          color: #92400e;
+          font-size: 1.4em;
+          margin-bottom: 15px;
+        }
+        .page-break {
+          page-break-before: always;
+        }
+        @media print {
+          body { margin: 20px; }
+          .retrofit-grid { grid-template-columns: 1fr; }
+          .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <h1>Portfolio Climate Risk Analysis Report</h1>
+        <p>Comprehensive Retrofit Investment Analysis</p>
+        <p>Generated: ${new Date().toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })}</p>
+      </div>
+      
+      <div class="executive-summary">
+        <h2 style="margin-top: 0; color: #112A43;">Executive Summary</h2>
+        <p>This report analyzes the climate risk exposure and retrofit opportunities across your ${portfolioMetrics.totalProperties}-property portfolio valued at ${portfolioMetrics.portfolioValue}. Our analysis identifies significant opportunities to reduce operational costs, increase revenue, and mitigate climate-related financial risks through strategic building improvements.</p>
+        
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-value">${portfolioMetrics.totalProperties}</div>
+            <div class="metric-label">Total Properties</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">${portfolioMetrics.portfolioValue}</div>
+            <div class="metric-label">Portfolio Value</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">${portfolioMetrics.avgRiskNumber}</div>
+            <div class="metric-label">Average Risk Score</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">${portfolioMetrics.avgNOIChange}</div>
+            <div class="metric-label">Projected NOI Impact</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2>Retrofit Investment Analysis</h2>
+        <p>The following analysis presents four key retrofit strategies, their associated costs, and projected financial impacts on your portfolio's future revenues and expenses compared to baseline performance.</p>
+        
+        <div class="retrofit-grid">
+          ${retrofitOptions
+            .map(
+              (option) => `
+            <div class="retrofit-card">
+              <h3>${option.name}</h3>
+              <div class="retrofit-details">
+                <div class="detail-item">
+                  <div class="detail-label">Investment Cost</div>
+                  <div class="detail-value">${option.cost}</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Payback Period</div>
+                  <div class="detail-value">${option.paybackPeriod}</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Annual Revenue Impact</div>
+                  <div class="detail-value">${option.annualRevenue}</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Annual Expense Savings</div>
+                  <div class="detail-value">${option.annualExpense}</div>
+                </div>
+              </div>
+              <div class="description">
+                <strong>Best Suited For:</strong> ${option.bestFor}<br><br>
+                ${option.description}
+              </div>
+            </div>
+          `,
+            )
+            .join("")}
+        </div>
+      </div>
+      
+      <div class="page-break"></div>
+      
+      <div class="section">
+        <h2>Property Type Recommendations</h2>
+        <p>Based on our analysis of building characteristics, energy consumption patterns, and operational requirements, the following recommendations are tailored to maximize ROI for each property type in your portfolio.</p>
+        
+        <div class="property-recommendations">
+          ${propertyRecommendations
+            .map(
+              (property) => `
+            <div class="property-card">
+              <h4>${property.type}</h4>
+              <div class="recommendation-grid">
+                <div class="recommendation-item">
+                  <div class="recommendation-label">Primary Recommendation</div>
+                  <div class="recommendation-value">${property.primaryRecommendation}</div>
+                </div>
+                <div class="recommendation-item">
+                  <div class="recommendation-label">Secondary Recommendation</div>
+                  <div class="recommendation-value">${property.secondaryRecommendation}</div>
+                </div>
+              </div>
+              <p style="margin: 15px 0; color: #374151;"><strong>Rationale:</strong> ${property.rationale}</p>
+              <div class="financial-summary">
+                <div class="financial-grid">
+                  <div class="financial-item">
+                    <div class="value">${property.expectedROI}</div>
+                    <div class="label">Expected ROI</div>
+                  </div>
+                  <div class="financial-item">
+                    <div class="value">${property.totalInvestment}</div>
+                    <div class="label">Total Investment</div>
+                  </div>
+                  <div class="financial-item">
+                    <div class="value">${property.annualSavings}</div>
+                    <div class="label">Annual Savings</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `,
+            )
+            .join("")}
+        </div>
+      </div>
+      
+      <div class="conclusion">
+        <h3>Strategic Implementation Roadmap</h3>
+        <p><strong>Phase 1 (Year 1):</strong> Begin with lighting & energy management upgrades across retail and mixed-use properties. These improvements offer the shortest payback period and generate immediate cash flow to fund subsequent phases.</p>
+        
+        <p><strong>Phase 2 (Years 2-3):</strong> Implement HVAC system upgrades in office buildings and industrial properties. Focus on buildings with the highest energy consumption and oldest systems for maximum impact.</p>
+        
+        <p><strong>Phase 3 (Years 3-5):</strong> Execute building envelope improvements (windows & insulation) in older properties, particularly in colder climates where heating loads are significant.</p>
+        
+        <p><strong>Phase 4 (Years 4-6):</strong> Install solar panel systems on properties with optimal roof conditions and high daytime energy consumption, prioritizing industrial and retail properties with large roof areas.</p>
+        
+        <p><strong>Expected Portfolio Impact:</strong> Full implementation of this roadmap is projected to reduce portfolio-wide operating expenses by 15-25%, increase net operating income by $44.5M annually, and significantly improve climate resilience across all properties.</p>
+      </div>
+    </body>
+    </html>
+  `
+
+    // Create a new window and write the HTML content
+    const printWindow = window.open("", "_blank", "width=800,height=600")
+    if (printWindow) {
+      printWindow.document.write(htmlContent)
+      printWindow.document.close()
+
+      // Wait for content to load, then trigger print dialog
+      printWindow.onload = () => {
+        setTimeout(() => {
+          printWindow.focus()
+          printWindow.print()
+        }, 500)
+      }
+    } else {
+      // Fallback: create downloadable HTML file
+      const blob = new Blob([htmlContent], { type: "text/html" })
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = "portfolio-climate-risk-report.html"
+      a.click()
+      window.URL.revokeObjectURL(url)
+    }
   }
 
   return (
